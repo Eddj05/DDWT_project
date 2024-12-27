@@ -171,6 +171,26 @@ def explore():
         if posts.has_next else None
     prev_url = url_for('explore', page=posts.prev_num) \
         if posts.has_prev else None
-    return render_template("index.html", title='Explore', posts=posts.items,
+    return render_template("explore.html", title='Explore', posts=posts.items,
                            next_url=next_url, prev_url=prev_url)
 
+
+@app.route('/add_recipe', methods=['GET', 'POST'])
+@login_required
+def add_recipe():
+    form = PostForm()
+    if form.validate_on_submit():
+        post = Post(
+            title=form.title.data,
+            description=form.description.data,
+            price=form.price.data,
+            servings=form.servings.data,
+            prep_time=form.prep_time.data,
+            recipe_text=form.recipe_text.data,
+            user_id=current_user.id
+        )
+        db.session.add(post)
+        db.session.commit()
+        flash('Your recipe has been added!', 'success')
+        return redirect(url_for('index'))
+    return render_template('add_recipe.html', title='Add Recipe', form=form)
