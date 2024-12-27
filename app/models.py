@@ -97,7 +97,13 @@ class User(UserMixin, db.Model):
 
 class Post(db.Model):
     id: so.Mapped[int] = so.mapped_column(primary_key=True)
-    body: so.Mapped[str] = so.mapped_column(sa.String(140))
+    title: so.Mapped[str] = so.mapped_column(sa.String(100), nullable=False)
+    description: so.Mapped[str] = so.mapped_column(sa.Text, nullable=True)
+    price: so.Mapped[float] = so.mapped_column(nullable=True)
+    servings: so.Mapped[int] = so.mapped_column(nullable=True)
+    prep_time: so.Mapped[int] = so.mapped_column(nullable=True)
+    recipe_text: so.Mapped[str] = so.mapped_column(sa.Text, nullable=True)
+
     timestamp: so.Mapped[datetime] = so.mapped_column(
         index=True, default=lambda: datetime.now(timezone.utc))
     user_id: so.Mapped[int] = so.mapped_column(sa.ForeignKey(User.id),

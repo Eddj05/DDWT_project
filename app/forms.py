@@ -7,6 +7,10 @@ from app.models import User
 from wtforms import TextAreaField
 from wtforms.validators import Length
 
+from wtforms import StringField, TextAreaField, SubmitField, DecimalField, IntegerField
+from wtforms.validators import DataRequired, Length, NumberRange
+
+
 class LoginForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired()])
     password = PasswordField('Password', validators=[DataRequired()])
@@ -42,7 +46,11 @@ class EmptyForm(FlaskForm):
     submit = SubmitField('Submit')   
 
 class PostForm(FlaskForm):
-    post = TextAreaField('Say something', validators=[
-        DataRequired(), Length(min=1, max=140)])
+    title = StringField('Title', validators=[DataRequired(), Length(max=100)])
+    description = TextAreaField('Description', validators=[DataRequired(), Length(max=200)])
+    price = DecimalField('Price ($)', validators=[DataRequired(), NumberRange(min=0)])
+    servings = IntegerField('Servings', validators=[DataRequired(), NumberRange(min=1)])
+    prep_time = IntegerField('Preparation Time (minutes)', validators=[DataRequired(), NumberRange(min=1)])
+    recipe_text = TextAreaField('Recipe', validators=[DataRequired()])
     submit = SubmitField('Submit')
 

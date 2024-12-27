@@ -5,7 +5,13 @@
             <a href="{{ url_for('user', username=post.author.username) }}">
                 {{ post.author.username }}
             </a>
-            says:<br>{{ post.body }}
+            says:<br>
+            <strong>{{ post.title }}</strong><br>
+            {{ post.description }}<br>
+            <em>Price: ${{ post.price }}</em><br>
+            <em>Servings: {{ post.servings }}</em><br>
+            <em>Preparation Time: {{ post.prep_time }} minutes</em><br>
+            <p>{{ post.recipe_text }}</p>
         </td>
     </tr>
 </table>

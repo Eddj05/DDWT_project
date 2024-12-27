@@ -17,7 +17,15 @@ from app.forms import EditProfileForm
 def index():
     form = PostForm()
     if form.validate_on_submit():
-        post = Post(body=form.post.data, author=current_user)
+        post = Post(
+            title=form.title.data,
+            description=form.description.data,
+            price=form.price.data,
+            servings=form.servings.data,
+            prep_time=form.prep_time.data,
+            recipe_text=form.recipe_text.data,
+            author=current_user
+        )
         db.session.add(post)
         db.session.commit()
         flash('Your post is now live!')
