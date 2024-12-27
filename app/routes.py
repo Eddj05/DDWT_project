@@ -194,3 +194,29 @@ def add_recipe():
         flash('Your recipe has been added!', 'success')
         return redirect(url_for('index'))
     return render_template('add_recipe.html', title='Add Recipe', form=form)
+
+@app.route('/edit_post/<int:post_id>', methods=['GET', 'POST'])
+@login_required
+def edit_post(post_id):
+    post = Post.query.get_or_404(post_id)
+
+    # Check if the logged-in user is the author of the post
+    if post.author != current_user:
+        flash('You can only edit your own posts!', 'danger')
+        return redirect(url_for('index'))
+
+    form = PostForm(obj=post)  # Populate the form with the post data
+
+    if form.validate_on_submit():
+        post.title = form.title.data
+        post.description = form.description.data
+        post.price = form.price.data
+        post.servings = form.servings.data
+        post.prep_time = form.prep_time.data
+        post.recipe_text = form.recipe_text.data
+        db.session.commit()
+        flash('Your post has been updated!', 'success')
+        return redirect(url_for('index'))
+
+    return render_template('edit_post.html', title='Edit Post', form=form, post=post)
+
