@@ -1,0 +1,30 @@
+
+* {
+  background-color: white;
+}
+
+body {
+    background-color: gray;
+    width: 90%;
+    margin: 0 auto;
+    padding: 20px 1% 20px;
+  }
+
+div {
+    background-color: lightgrey;
+  }
+
+h1 {
+    background-color: lightgrey;
+  }
+
+h3 {
+    background-color: lightgrey;
+  }
+
+table {
+    background-color: green;
+    width: 100%;
+    padding: 1%;
+    margin-bottom: 1%;
+  }
