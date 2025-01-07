@@ -10,6 +10,7 @@
       <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
     </head>
     <body>
+        <!-- Navbar-->
         <div>
           Cookin' for Good Lookin': 
           <a href="{{ url_for('index') }}">Home</a>
@@ -23,6 +24,7 @@
           <a href=""> Find user </a> <!-- We stil need to do this -->
           {% endif %}
         </div>
+        
         <hr>
         {% with messages = get_flashed_messages() %}
         {% if messages %}
