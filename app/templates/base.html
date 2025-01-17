@@ -6,24 +6,70 @@
       {% else %}
       <title>Welcome to Cookin' for Good Lookin'</title>
       {% endif %}
+      
+      <link rel="preconnect" href="https://fonts.googleapis.com">
+      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-      <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+      <!--css template files-->
+
+      <!-- Google Fonts -->
+      <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;300;400;700;900&display=swap" rel="stylesheet">
+
+      <!-- Bootstrap CSS -->
+      <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+
+      <!-- Bootstrap Icons -->
+      <link href="{{ url_for('static', filename='css/bootstrap-icons.css') }}" rel="stylesheet">
+
+      <!-- Slick CSS -->
+      <link rel="stylesheet" href="{{ url_for('static', filename='css/slick.css') }}"/>
+
+      <!-- Tooplate CSS -->
+      <link href="{{ url_for('static', filename='css/tooplate-little-fashion.css') }}" rel="stylesheet">
     </head>
     <body>
+
+      <main>
         <!-- Navbar-->
-        <div>
-          Cookin' for Good Lookin': 
-          <a href="{{ url_for('index') }}">Home</a>
-          {% if current_user.is_anonymous %}
-          <a href="{{ url_for('login') }}">Login</a> 
-          {% else %}
-          <a href="{{ url_for('user', username=current_user.username) }}">Profile</a>
-          <a href="{{ url_for('explore') }}">Explore</a>
-          <a href="{{ url_for('logout') }}">Logout</a>
-          <a href="{{url_for('add_recipe') }}"> Add a recipe </a>
-          <a href=""> Find user </a> <!-- We stil need to do this -->
-          {% endif %}
+        <nav class="navbar navbar-expand-lg">
+          <div class="container">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <a class="navbar-brand" href="{{ url_for('index') }}">
+              <strong><span>Cookin'</span>  for Good Lookin'</strong>
+            </a>
+            
+            <div class="collapse navbar-collapse" id="navbarNav">
+              <ul class="navbar-nav mx-auto">
+                  <li class="nav-item">
+                    <a class="nav-link {% if request.path == url_for('index') %}active{% endif %}" href="{{ url_for('index') }}">Home</a>
+                  </li>
+
+                  <li class="nav-item">
+                    <a class="nav-link {% if request.path == url_for('user', username=current_user.username) %}active{% endif %}" href="{{ url_for('user', username=current_user.username) }}">Profile</a>
+                  </li>
+
+                  <li class="nav-item">
+                    <a class="nav-link {% if request.path == url_for('explore') %}active{% endif %}" href="{{ url_for('explore') }}">Explore</a>
+                  </li>
+
+                  <li class="nav-item">
+                    <a class="nav-link {% if request.path == url_for('add_recipe') %}active{% endif %}" href="{{ url_for('add_recipe') }}">Add recipe</a>
+                  </li>
+
+                  <li class="nav-item">
+                      <a class="nav-link" href="">Find user</a> <!-- We stil need to do this -->
+                  </li>
+              </ul>
+
+              <div class="d-none d-lg-block">
+                <a href="{{ url_for('logout') }}" class="bi-person custom-icon me-3"></a>
+            </div>
+          </div>
         </div>
+      </nav>
         
         <hr>
         {% with messages = get_flashed_messages() %}
@@ -36,5 +82,6 @@
         {% endif %}
         {% endwith %}
         {% block content %}{% endblock %}
+      </main>
     </body>
 </html>

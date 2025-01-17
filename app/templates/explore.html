@@ -1,7 +1,22 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h1>Explore Recipes</h1>
+
+    <header class="site-header section-padding d-flex justify-content-center align-items-center">
+        <div class="container">
+            <div class="row">
+
+                <div class="col-lg-10 col-12">
+                    <h1>
+                        <td></td>
+                        <td>
+                        <span class="d-block text-primary">Explore </span>
+                        <span class="d-block text-dark">Recipes</span>
+                    </h1>
+                </div>
+            </div>
+        </div>
+    </header>
 
     {% for post in posts %}
         {% include '_post.html' %}

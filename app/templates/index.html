@@ -1,20 +1,39 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h1>Hi, {{ current_user.username }}!</h1>
 
-    <h1> Recipes </h1>
-    <h3>
-        <a href="{{ url_for('add_recipe') }}" class="btn btn-success">Add a Recipe</a>
-    </h3>
+    <section class="slick-slideshow">   
+        <div class="slick-custom">
+            <img src="../static/images/slideshow/medium-shot-business-women-high-five.jpeg" class="img-fluid" alt="">
 
-    {% for post in posts %}
-        {% include '_post.html' %}
-    {% endfor %}
-    {% if prev_url %}
-    <a href="{{ prev_url }}">Newer posts</a>
-    {% endif %}
-    {% if next_url %}
-    <a href="{{ next_url }}">Older posts</a>
-    {% endif %}
+            <div class="slick-bottom">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-6 col-10">
+                            <h1 class="slick-title">Cookin'for good lookin'</h1>
+
+                            <p class="lead text-white mt-lg-3 mb-lg-5">Our website is a community-driven platform designed to let food lovers create and share their favorite recipes with each other. Whether you’re an experienced chef or just starting your culinary journey</p>
+
+                            <a href="{{ url_for('explore') }}" class="btn custom-btn">Explore Recipes</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </section>
+
+    <section class="products section-padding">
+        <div class="container">
+            <div class="row">
+                
+                <div class="col-12">
+                    <h1>Welcome, {{ current_user.username }}!</h1>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+
 {% endblock %}
