@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, render_template
 from config import Config
 from flask_sqlalchemy import SQLAlchemy
 import os
@@ -10,6 +10,7 @@ from flask_login import LoginManager
 # Initialize the database and login manager
 db = SQLAlchemy()
 login = LoginManager()
+migrate = Migrate()
 
 def create_app(config_class=Config):
     # Create the App context
@@ -27,6 +28,9 @@ def create_app(config_class=Config):
     app.config['SECRET_KEY'] = 'your-secret-key' 
     login.init_app(app)
     login.login_view = 'login' 
+
+    # Set up migrations with Flask-Migrate
+    migrate.init_app(app, db)
 
     from app.api import bp as api_bp
     app.register_blueprint(api_bp, url_prefix='/api')
