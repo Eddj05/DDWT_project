@@ -1,11 +1,9 @@
 from app.api import bp
 from app.models import User, Post
-import sqlalchemy as sa
-from flask import request
-from flask import url_for
 from app import db
+import sqlalchemy as sa
+from flask import request, url_for
 from app.api.errors import bad_request
-from flask import abort
 from app.api.auth import token_auth
 
 @bp.route('/posts/<int:id>', methods=['GET'])

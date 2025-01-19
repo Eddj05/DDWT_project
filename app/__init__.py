@@ -4,7 +4,9 @@ from flask_sqlalchemy import SQLAlchemy
 import os
 from flask_migrate import Migrate
 from flask_login import LoginManager
+from app.api import bp as api_bp
 # from app import routes, models, errors
+from app.models import db
 
 
 # Initialize the database and login manager
@@ -32,7 +34,7 @@ def create_app(config_class=Config):
     # Set up migrations with Flask-Migrate
     migrate.init_app(app, db)
 
-    from app.api import bp as api_bp
+    
     app.register_blueprint(api_bp, url_prefix='/api')
 
     db.init_app(app)

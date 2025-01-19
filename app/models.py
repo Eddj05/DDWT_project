@@ -1,11 +1,13 @@
+from flask import url_for
+from app import db, login
 from datetime import datetime, timezone
 from typing import Optional
 import sqlalchemy as sa
 import sqlalchemy.orm as so
-from app import db, login
 from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
 from hashlib import md5
+import secrets
 
 
 followers = sa.Table(
@@ -17,6 +19,28 @@ followers = sa.Table(
               primary_key=True)
 )
 
+class Post(db.Model):
+    id: so.Mapped[int] = so.mapped_column(primary_key=True)
+    title: so.Mapped[str] = so.mapped_column(sa.String(100), nullable=False)
+    description: so.Mapped[str] = so.mapped_column(sa.Text, nullable=True)
+    price: so.Mapped[float] = so.mapped_column(nullable=True)
+    servings: so.Mapped[int] = so.mapped_column(nullable=True)
+    prep_time: so.Mapped[int] = so.mapped_column(nullable=True)
+    recipe_text: so.Mapped[str] = so.mapped_column(sa.Text, nullable=True)
+
+    timestamp: so.Mapped[datetime] = so.mapped_column(
+        index=True, default=lambda: datetime.now(timezone.utc))
+    user_id: so.Mapped[int] = so.mapped_column(sa.ForeignKey(User.id),
+                                               index=True)
+
+    author: so.Mapped[User] = so.relationship(back_populates='posts')
+
+    def __repr__(self):
+        return '<Post {}>'.format(self.body)
+
+@login.user_loader
+def load_user(id):
+    return db.session.get(User, int(id))
 
 class PaginatedAPIMixin(object):
     @staticmethod
@@ -175,28 +199,7 @@ class User(PaginatedAPIMixin, UserMixin, db.Model):
         if new_user and 'password' in data:
             self.set_password(data['password'])
 
-class Post(db.Model):
-    id: so.Mapped[int] = so.mapped_column(primary_key=True)
-    title: so.Mapped[str] = so.mapped_column(sa.String(100), nullable=False)
-    description: so.Mapped[str] = so.mapped_column(sa.Text, nullable=True)
-    price: so.Mapped[float] = so.mapped_column(nullable=True)
-    servings: so.Mapped[int] = so.mapped_column(nullable=True)
-    prep_time: so.Mapped[int] = so.mapped_column(nullable=True)
-    recipe_text: so.Mapped[str] = so.mapped_column(sa.Text, nullable=True)
 
-    timestamp: so.Mapped[datetime] = so.mapped_column(
-        index=True, default=lambda: datetime.now(timezone.utc))
-    user_id: so.Mapped[int] = so.mapped_column(sa.ForeignKey(User.id),
-                                               index=True)
-
-    author: so.Mapped[User] = so.relationship(back_populates='posts')
-
-    def __repr__(self):
-        return '<Post {}>'.format(self.body)
-
-@login.user_loader
-def load_user(id):
-    return db.session.get(User, int(id))
 
 
 
