@@ -1,5 +1,5 @@
 from flask import url_for
-from app import db
+from app import db, login
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
 from datetime import datetime, timezone, timedelta
@@ -30,10 +30,10 @@ class Post(db.Model):
 
     timestamp: so.Mapped[datetime] = so.mapped_column(
         index=True, default=lambda: datetime.now(timezone.utc))
-    user_id: so.Mapped[int] = so.mapped_column(sa.ForeignKey(User.id),
+    user_id: so.Mapped[int] = so.mapped_column(sa.ForeignKey('user.id'),
                                                index=True)
 
-    author: so.Mapped[User] = so.relationship(back_populates='posts')
+    author: so.Mapped['User'] = so.relationship(back_populates='posts')
 
     def __repr__(self):
         return '<Post {}>'.format(self.body)
