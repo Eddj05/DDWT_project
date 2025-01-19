@@ -1,5 +1,6 @@
 from flask import render_template, flash, request, redirect, url_for
-from app import app, db
+from app import db
+from flask import current_app as app
 from app.forms import LoginForm, EmptyForm, PostForm, EditProfileForm, RegistrationForm
 from flask_login import current_user, login_user, login_required, logout_user
 import sqlalchemy as sa

@@ -2,11 +2,12 @@ from flask import Flask, render_template
 from config import Config
 from flask_sqlalchemy import SQLAlchemy
 import os
-from flask_migrate import Migrate
 from flask_login import LoginManager
-from app.api import bp as api_bp
+from flask_migrate import Migrate
+# from app.api import bp as api_bp
+# from app import routes
 # from app import routes, models, errors
-from app.models import db
+# from app.models import db
 
 
 # Initialize the database and login manager
@@ -31,17 +32,27 @@ def create_app(config_class=Config):
     login.init_app(app)
     login.login_view = 'login' 
 
+    # Initialize the database
+    db.init_app(app)
+
     # Set up migrations with Flask-Migrate
     migrate.init_app(app, db)
 
-    
+    from app.api import bp as api_bp
     app.register_blueprint(api_bp, url_prefix='/api')
 
-    db.init_app(app)
+    
 
     @app.errorhandler(500)
     def internal_error(error):
         return render_template('500.html'), 500
+    
+    with app.app_context():
+        from .models import Movie
+        db.create_all()
+
+    from .routes import init_routes
+    init_routes(app)
     
     return app
 
