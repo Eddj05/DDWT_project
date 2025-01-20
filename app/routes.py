@@ -233,3 +233,30 @@ def init_routes(app):
 
         return render_template('recipe.html', post=post, title=title)
 
+    @app.route('/delete_post/<int:post_id>', methods=['POST'])
+    @login_required
+    def delete_post(post_id):
+        # Haal de post op via de ID
+        post = Post.query.get(post_id)
+        
+        # Controleer of de post bestaat
+        if not post:
+            flash('Post not found!', 'danger')
+            return redirect(url_for('index'))
+        
+        try:
+            # Controleer of de huidige gebruiker de auteur van de post is
+            if post.author != current_user:
+                flash('You can only delete your own posts!', 'danger')
+                return redirect(url_for('index'))
+            
+            # Verwijder de post uit de database
+            db.session.delete(post)
+            db.session.commit()
+            flash('Post deleted successfully!', 'success')
+        
+        except Exception as e:
+            # Als er een probleem is, toon een foutmelding
+            flash('There was a problem deleting that post: ' + str(e), 'danger')
+        
+        return redirect(url_for('index'))
