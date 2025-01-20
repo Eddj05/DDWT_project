@@ -17,7 +17,7 @@
         </div>
     </header>
 
-    <a href="{{ url_for('explore') }}" class="btn">Go back to: Explore Recipes</a>
+    
 
     <section class="about section-padding">
         <div class="container">
@@ -38,6 +38,8 @@
                     <em>Servings: {{ post.servings }}</em><br>
                     <em>Preparation Time: {{ post.prep_time }} minutes</em><br>
                     <p>{{ post.recipe_text | nl2br | safe }}</p></p>
+
+                    <a href="{{ url_for('explore') }}" class="btn custom-btn">Explore more recipes</a>
                 </div>
             </div>
         </div>
