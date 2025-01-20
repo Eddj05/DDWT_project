@@ -192,7 +192,7 @@ def init_routes(app):
             db.session.add(post)
             db.session.commit()
             flash('Your recipe has been added!', 'success')
-            return redirect(url_for('index'))
+            return redirect(url_for('explore'))
         return render_template('add_recipe.html', title='Add Recipe', form=form)
 
     @app.route('/edit_post/<int:post_id>', methods=['GET', 'POST'])
@@ -203,7 +203,7 @@ def init_routes(app):
         # Check if the logged-in user is the author of the post
         if post.author != current_user:
             flash('You can only edit your own posts!', 'danger')
-            return redirect(url_for('index'))
+            return redirect(url_for('explore'))
 
         form = PostForm(obj=post)  # Populate the form with the post data
 
@@ -216,7 +216,7 @@ def init_routes(app):
             post.recipe_text = form.recipe_text.data
             db.session.commit()
             flash('Your post has been updated!', 'success')
-            return redirect(url_for('index'))
+            return redirect(url_for('explore'))
 
         return render_template('edit_post.html', title='Edit Post', form=form, post=post)
     
@@ -242,13 +242,13 @@ def init_routes(app):
         # Controleer of de post bestaat
         if not post:
             flash('Post not found!', 'danger')
-            return redirect(url_for('index'))
+            return redirect(url_for('explore'))
         
         try:
             # Controleer of de huidige gebruiker de auteur van de post is
             if post.author != current_user:
                 flash('You can only delete your own posts!', 'danger')
-                return redirect(url_for('index'))
+                return redirect(url_for('explore'))
             
             # Verwijder de post uit de database
             db.session.delete(post)
@@ -259,4 +259,4 @@ def init_routes(app):
             # Als er een probleem is, toon een foutmelding
             flash('There was a problem deleting that post: ' + str(e), 'danger')
         
-        return redirect(url_for('index'))
+        return redirect(url_for('explore'))
