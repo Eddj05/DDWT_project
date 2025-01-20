@@ -12,8 +12,8 @@ https://www.tooplate.com/view/2127-little-fashion
 -----------------------------------------*/
 :root {
   --white-color:                #FFFFFF;
-  --primary-color:              #FF4400;
-  --section-bg-color:           #f0f8ff;
+  --primary-color:              #0060e7;
+  --section-bg-color:           #e3f3f8;
   --dark-color:                 #000000;
   --grey-color:                 #d0d1d1;
   --p-color:                    #717275;
@@ -1193,3 +1193,12 @@ button:focus:not(:focus-visible) {
 .recipe_title_button:hover {
   background-color: #d0d1d1;
 }
+
+.blue-item {
+padding: 2.5%;
+}
+
+.white-item {
+  background-color: white;
+  padding: 2.5%;
+  }

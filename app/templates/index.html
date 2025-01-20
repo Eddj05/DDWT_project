@@ -29,6 +29,9 @@
                 
                 <div class="col-12">
                     <h1>Welcome, {{ current_user.username }}!</h1>
+                    <h3>
+                        <a href="{{ url_for('add_recipe') }}" class="btn btn-success">Add a Recipe</a>
+                    </h3>
                 </div>
             </div>
         </div>

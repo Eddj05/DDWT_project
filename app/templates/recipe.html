@@ -18,19 +18,28 @@
         </div>
     </header>
 
-    <p>
-        Posted by: 
-        <img src="{{ post.author.avatar(36) }}" alt="{{ post.author.username }}" />
-        <a href="{{ url_for('user', username=post.author.username) }}">
-            {{ post.author.username }}
-        </a>
+    <section class="about section-padding">
+        <div class="container">
+            <div class="row">
+    
+                <div class="col-12 text-left">
+                    <p>
+                        Posted by: 
+                        <img src="{{ post.author.avatar(36) }}" alt="{{ post.author.username }}" />
+                        <a href="{{ url_for('user', username=post.author.username) }}">
+                            {{ post.author.username }}
+                        </a>
+                    </p>
 
-    </p>
+                    <h1>{{ post.title }}</h1>
+                    <p>{{ post.description }}</p>
+                    <em>Price: €{{ post.price }}</em><br>
+                    <em>Servings: {{ post.servings }}</em><br>
+                    <em>Preparation Time: {{ post.prep_time }} minutes</em><br>
+                    <p>{{ post.recipe_text | nl2br | safe }}</p></p>
+                </div>
+            </div>
+        </div>
+    </section>
 
-    <h1>{{ post.title }}</h1>
-    <p>{{ post.description }}</p>
-    <em>Price: €{{ post.price }}</em><br>
-    <em>Servings: {{ post.servings }}</em><br>
-    <em>Preparation Time: {{ post.prep_time }} minutes</em><br>
-    <p>{{ post.recipe_text | nl2br | safe }}</p></p>
 {% endblock %}
