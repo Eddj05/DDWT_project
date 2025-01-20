@@ -12,7 +12,7 @@
                         <div class="col-lg-6 col-10">
                             <h1 class="slick-title">Cookin'for good lookin'</h1>
 
-                            <p class="lead text-white mt-lg-3 mb-lg-5">Our website is a community-driven platform designed to let food lovers create and share their favorite recipes with each other. Whether you’re an experienced chef or just starting your culinary journey</p>
+                            <p class="lead text-white mt-lg-3 mb-lg-5">Our website is a community-driven platform designed to let food lovers create and share their favorite recipes with each other. Whether you’re an experienced chef or just starting your culinary journey.</p>
 
                             <a href="{{ url_for('explore') }}" class="btn custom-btn">Explore Recipes</a>
                         </div>
@@ -34,6 +34,7 @@
                     </h3>
                 </div>
 
+                <h2 class="mb-4">Recipes from people<span> you follow</span></h2>
                 {% for post in posts %}
                 {% include '_post.html' %}
                 {% endfor %}
