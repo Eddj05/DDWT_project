@@ -15,6 +15,9 @@ db = SQLAlchemy()
 login = LoginManager()
 migrate = Migrate()
 
+def nl2br_filter(text):
+    return text.replace('\n', '<br>\n')
+
 def create_app(config_class=Config):
     # Create the App context
     app = Flask(__name__)
@@ -37,6 +40,9 @@ def create_app(config_class=Config):
 
     # Set up migrations with Flask-Migrate
     migrate.init_app(app, db)
+
+    # Register the custom filter for nl2br
+    app.jinja_env.filters['nl2br'] = nl2br_filter
 
     from app.api import bp as api_bp
     app.register_blueprint(api_bp, url_prefix='/api')

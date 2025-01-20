@@ -1,4 +1,4 @@
-from flask import render_template, flash, request, redirect, url_for
+from flask import render_template, flash, request, redirect, url_for, abort
 from app import db
 from flask import current_app as app
 from app.forms import LoginForm, EmptyForm, PostForm, EditProfileForm, RegistrationForm
@@ -219,4 +219,17 @@ def init_routes(app):
             return redirect(url_for('index'))
 
         return render_template('edit_post.html', title='Edit Post', form=form, post=post)
+    
+    @app.route('/recipe/<int:post_id>')
+    def recipe(post_id):
+        # fetch the post by its ID
+        post = Post.query.get(post_id)
+        
+        # return an error when the page isn't found
+        if post is None:
+            abort(404)
+
+        title = post.title
+
+        return render_template('recipe.html', post=post, title=title)
 

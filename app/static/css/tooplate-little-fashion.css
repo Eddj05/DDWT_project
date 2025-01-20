@@ -1180,3 +1180,16 @@ button:focus:not(:focus-visible) {
   }
 }
 
+/*---------------------------------------
+  ADDED CSS, APART FROM THE TEMPLATE               
+-----------------------------------------*/
+.recipe_title_button {
+  font-size: 20px;
+  color: #515254;
+  text-decoration: none;
+  padding: 5px 10px;
+}
+
+.recipe_title_button:hover {
+  background-color: #d0d1d1;
+}
