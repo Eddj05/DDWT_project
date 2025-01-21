@@ -40,12 +40,18 @@
     <div class="container">
         <div class="row">
             <div class="col-12">
-                <h2 class="mb-5">Your Posts</h2>
-            </div>
+                {% if user == current_user %}
+                    <h2 class="mb-5">Your Posts</h2>
+                    <h3>
+                        <a href="{{ url_for('add_recipe') }}" class="btn btn-success">Add a Recipe</a>
+                    </h3>
+                {% else %}
+                <h2><a href="{{ url_for('user', username=user.username) }}">
+                    {{ user.username }}
+                </a> their posts</h2><br>
+                {% endif %}
 
-            <h3>
-                <a href="{{ url_for('add_recipe') }}" class="btn btn-success">Add a Recipe</a>
-            </h3>
+            </div>
 
             {% for post in posts %}
                 <div class="col-lg-4 col-md-6 col-12 mb-3">
