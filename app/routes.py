@@ -1,4 +1,4 @@
-from flask import render_template, flash, request, redirect, url_for, abort
+from flask import render_template, flash, request, redirect, url_for, abort, jsonify
 from app import db
 from flask import current_app as app
 from app.forms import LoginForm, EmptyForm, PostForm, EditProfileForm, RegistrationForm
@@ -7,7 +7,7 @@ import sqlalchemy as sa
 from app.models import User, Post
 from urllib.parse import urlsplit
 from datetime import datetime, timezone
-from flask import jsonify
+
 
 def init_routes(app):
     @app.route('/', methods=['GET', 'POST'])
