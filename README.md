@@ -43,7 +43,7 @@ flask db upgrade
 flask run
 
 ## Authors
-Anya Kieiwt (S5168767) - Group Leader
+Anya Kiewit (S5168767) - Group Leader
 
 Carlijn Vrieling (S4737486)
 
