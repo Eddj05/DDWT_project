@@ -36,7 +36,9 @@
 
                 <h2 class="mb-4">Recipes from people<span> you follow</span></h2>
                 {% for post in posts %}
+                {% if post.author.id != current_user.id %}
                 {% include '_post.html' %}
+                {% endif %}
                 {% endfor %}
 
                 <div class="col-12">
