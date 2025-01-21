@@ -7,6 +7,7 @@ import sqlalchemy as sa
 from app.models import User, Post
 from urllib.parse import urlsplit
 from datetime import datetime, timezone
+from flask import jsonify
 
 def init_routes(app):
     @app.route('/', methods=['GET', 'POST'])
@@ -260,3 +261,27 @@ def init_routes(app):
             flash('There was a problem deleting that post: ' + str(e), 'danger')
         
         return redirect(url_for('explore'))
+    
+
+    @app.route('/like/<int:post_id>', methods=['POST'])
+    @login_required
+    def like_recipe(post_id):
+        # Find the post by its ID
+        post = Post.query.get_or_404(post_id)
+
+        # Check if the user has already liked the post
+        if not current_user.has_liked_post(post):
+            # Like the post
+            current_user.like_post(post)
+        else:
+            # Unlike the post
+            current_user.unlike_post(post)
+
+        # Commit the changes to the database
+        db.session.commit()
+
+        # Return the updated like count and liked status as JSON
+        return jsonify({
+            'likes_count': post.likes_count(),
+            'liked': current_user.has_liked_post(post)
+        })

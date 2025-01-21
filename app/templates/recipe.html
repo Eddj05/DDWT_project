@@ -33,7 +33,48 @@
                     </p>
                     
                     
-                    <h1><a href="#" class="bi-heart-fill heart-icon ms-auto2"></a> {{ post.title }}</h1>
+                    <h1>
+                        <form id="like-form-{{ post.id }}" method="POST" action="{{ url_for('like_recipe', post_id=post.id) }}">
+                            <button type="submit" class="bi-heart-fill heart-icon ms-auto2 {{ 'liked' if current_user.has_liked_post(post) else '' }}" data-post-id="{{ post.id }}">
+                            </button>
+                        </form>
+                        {{ post.title }} - <span id="like-count-{{ post.id }}">{{ post.likes_count() }}</span> likes
+                    </h1>
+
+                    <script>
+                        document.addEventListener('DOMContentLoaded', function() {
+                            const likeButtons = document.querySelectorAll('.bi-heart-fill');
+                            
+                            likeButtons.forEach(button => {
+                                button.addEventListener('click', function(event) {
+                                    event.preventDefault();
+                                    const postId = this.getAttribute('data-post-id');
+                                    const form = document.getElementById(`like-form-${postId}`);
+                                    
+                                    fetch(form.action, {
+                                        method: 'POST',
+                                        headers: {
+                                            'Content-Type': 'application/x-www-form-urlencoded',
+                                        },
+                                        body: new URLSearchParams(new FormData(form)).toString()
+                                    })
+                                    .then(response => response.json())
+                                    .then(data => {
+                                        const likeCount = document.getElementById(`like-count-${postId}`);
+                                        likeCount.innerText = data.likes_count;
+                
+                                        if (data.liked) {
+                                            this.classList.add('liked');
+                                        } else {
+                                            this.classList.remove('liked');
+                                        }
+                                    })
+                                    .catch(error => console.error('Error:', error));
+                                });
+                            });
+                        });
+                    </script>
+                    
                     <p>{{ post.description }}</p>
                     <em>Price: €{{ post.price }}</em><br>
                     <em>Servings: {{ post.servings }}</em><br>

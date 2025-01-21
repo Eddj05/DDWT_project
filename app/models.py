@@ -30,13 +30,17 @@ class Post(db.Model):
 
     timestamp: so.Mapped[datetime] = so.mapped_column(
         index=True, default=lambda: datetime.now(timezone.utc))
-    user_id: so.Mapped[int] = so.mapped_column(sa.ForeignKey('user.id'),
-                                               index=True)
+    user_id: so.Mapped[int] = so.mapped_column(sa.ForeignKey('user.id'), index=True)
 
     author: so.Mapped['User'] = so.relationship(back_populates='posts')
 
+    likes = db.relationship('Like', back_populates='post', lazy='dynamic')
+
     def __repr__(self):
-        return '<Post {}>'.format(self.body)
+        return f"<Post {self.title}>"
+    
+    def likes_count(self):
+        return self.likes.count()
 
 @login.user_loader
 def load_user(id):
@@ -68,36 +72,36 @@ class PaginatedAPIMixin(object):
 
 class User(PaginatedAPIMixin, UserMixin, db.Model):
     id: so.Mapped[int] = so.mapped_column(primary_key=True)
-    username: so.Mapped[str] = so.mapped_column(sa.String(64), index=True,
-                                                unique=True)
-    email: so.Mapped[str] = so.mapped_column(sa.String(120), index=True,
-                                             unique=True)
+    username: so.Mapped[str] = so.mapped_column(sa.String(64), index=True, unique=True)
+    email: so.Mapped[str] = so.mapped_column(sa.String(120), index=True, unique=True)
     password_hash: so.Mapped[Optional[str]] = so.mapped_column(sa.String(256))
 
-    posts: so.WriteOnlyMapped['Post'] = so.relationship(
-        back_populates='author')
+    posts: so.WriteOnlyMapped['Post'] = so.relationship(back_populates='author')
 
     about_me: so.Mapped[Optional[str]] = so.mapped_column(sa.String(140))
-    last_seen: so.Mapped[Optional[datetime]] = so.mapped_column(
-        default=lambda: datetime.now(timezone.utc))
-    
-    token: so.Mapped[Optional[str]] = so.mapped_column(
-        sa.String(32), index=True, unique=True)
+    last_seen: so.Mapped[Optional[datetime]] = so.mapped_column(default=lambda: datetime.now(timezone.utc))
+
+    token: so.Mapped[Optional[str]] = so.mapped_column(sa.String(32), index=True, unique=True)
     token_expiration: so.Mapped[Optional[datetime]]
 
-    def get_token(self, expires_in=3600):
-            now = datetime.now(timezone.utc)
-            if self.token and self.token_expiration.replace(
-                    tzinfo=timezone.utc) > now + timedelta(seconds=60):
-                return self.token
-            self.token = secrets.token_hex(16)
-            self.token_expiration = now + timedelta(seconds=expires_in)
-            db.session.add(self)
-            return self.token
+    # Back-populate liked_posts relationship from Like model
+    liked_posts = db.relationship('Like', back_populates='user', lazy='dynamic')
 
-    def revoke_token(self):
-        self.token_expiration = datetime.now(timezone.utc) - timedelta(
-            seconds=1)
+    def like_post(self, post):
+        if not self.has_liked_post(post):
+            like = Like(user_id=self.id, post_id=post.id)
+            db.session.add(like)
+
+    def unlike_post(self, post):
+        if self.has_liked_post(post):
+            Like.query.filter_by(user_id=self.id, post_id=post.id).delete()
+
+    def has_liked_post(self, post):
+        """Check if user has liked a post."""
+        return Like.query.filter_by(user_id=self.id, post_id=post.id).count() > 0
+
+    def __repr__(self):
+        return f"<User {self.username}>"
 
     @staticmethod
     def check_token(token):
@@ -198,6 +202,19 @@ class User(PaginatedAPIMixin, UserMixin, db.Model):
                 setattr(self, field, data[field])
         if new_user and 'password' in data:
             self.set_password(data['password'])
+
+class Like(db.Model):
+    __tablename__ = 'likes'
+    
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    post_id = db.Column(db.Integer, db.ForeignKey('post.id'), nullable=False)
+
+    # Ensure uniqueness of the like per user and post
+    db.UniqueConstraint('user_id', 'post_id', name='unique_user_post_like')
+
+    user = db.relationship('User', back_populates='liked_posts')
+    post = db.relationship('Post', back_populates='likes')
 
 
 

@@ -1216,4 +1216,8 @@ padding: 2.5%;
   color: red;
 }
 
+.heart-icon.liked {
+  color: red;
+}
+
 .ms-auto2{margin-left:auto!important}
