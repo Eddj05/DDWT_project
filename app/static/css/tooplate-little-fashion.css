@@ -1206,3 +1206,14 @@ padding: 2.5%;
 .flip-image {
   transform: scaleX(-1);
 }
+
+.heart-icon {
+  color: gray;
+  font-size: 42px;
+}
+
+.heart-icon:hover {
+  color: red;
+}
+
+.ms-auto2{margin-left:auto!important}
