@@ -7,9 +7,9 @@ This is a community-driven recipe-sharing application where users can explore, s
 The Cookin' for good lookin' website is a responsive web application built to showcase a wide variety of recipes. Our users can:
 - Explore new recipes
 - Share their own recipes.
-- Follow eachother
-- like eachothers recipes
-- View detailed cooking instructions, ingredients, and nutrition information.
+- Follow each other
+- like each others recipes
+- View detailed cooking instructions, ingredients, and price and time information.
 
 # Intsallation requirements and dependencies
 
