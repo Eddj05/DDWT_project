@@ -38,7 +38,7 @@
                             <button type="submit" class="bi-heart-fill heart-icon ms-auto2 {{ 'liked' if current_user.has_liked_post(post) else '' }}" data-post-id="{{ post.id }}">
                             </button>
                         </form>
-                        {{ post.title }} - <span id="like-count-{{ post.id }}">{{ post.likes_count() }}</span> likes
+                        {{ post.title }} - <span id="like-count-{{ post.id }}">{{ post.likes_count() }}</span> like(s)
                     </h1>
 
                     <script>
