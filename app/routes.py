@@ -285,3 +285,30 @@ def init_routes(app):
             'likes_count': post.likes_count(),
             'liked': current_user.has_liked_post(post)
         })
+    
+    @app.route('/find_user', methods=['GET'])
+    def find_user():
+        # Get the search query from the URL parameter, default to an empty string
+        username_query = request.args.get('username', '').strip()
+
+        if username_query:
+            # First, find users whose username starts with the query (sorted at the top)
+            users_start = User.query.filter(User.username.ilike(f'{username_query}%')).all()
+
+            # Then, find users whose username contains the query (but doesn't start with it)
+            users_contains = User.query.filter(User.username.ilike(f'%{username_query}%')).all()
+
+            # Combine the two lists: first the users who start with the query, then the others
+            # Remove duplicates by using a set (to keep only unique users)
+            users = list({user.id: user for user in users_start + users_contains}.values())
+        else:
+            # If there's no search query, show all users
+            users = User.query.all()
+
+        return render_template('find_user.html', users=users, username_query=username_query)
+    
+    @app.route('/user/<int:user_id>')
+    def view_user(user_id):
+        user = User.query.get_or_404(user_id)
+        form = EmptyForm()
+        return render_template('user.html', user=user, form=form)
