@@ -165,7 +165,12 @@ def init_routes(app):
     @login_required
     def explore():
         page = request.args.get('page', 1, type=int)
-        query = sa.select(Post).order_by(Post.timestamp.desc())
+        query = (
+        sa.select(Post)
+        .join(Post.author)
+        .where(Post.user_id != current_user.id)  # Exclude the current user's posts
+        .order_by(Post.timestamp.desc())
+    )
         posts = db.paginate(query, page=page,
                             per_page=app.config['POSTS_PER_PAGE'], error_out=False)
         next_url = url_for('explore', page=posts.next_num) \
