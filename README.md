@@ -4,6 +4,8 @@ This is a community-driven recipe-sharing application where users can explore, s
 
 ## Authors
 Carlijn Vrieling (S4737486)
+
 Edwin de Jong (S5724759)
+
 Anya Kieiwt (S5168767) - Group Leader
 
