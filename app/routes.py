@@ -201,12 +201,12 @@ def init_routes(app):
     def edit_post(post_id):
         post = Post.query.get_or_404(post_id)
 
-        # Check if the logged-in user is the author of the post
+        # check if the logged-in user is the author of the post
         if post.author != current_user:
             flash('You can only edit your own posts!', 'danger')
             return redirect(url_for('explore'))
 
-        form = PostForm(obj=post)  # Populate the form with the post data
+        form = PostForm(obj=post)
 
         if form.validate_on_submit():
             post.title = form.title.data
@@ -237,27 +237,27 @@ def init_routes(app):
     @app.route('/delete_post/<int:post_id>', methods=['POST'])
     @login_required
     def delete_post(post_id):
-        # Haal de post op via de ID
+        # fetch the post by its ID
         post = Post.query.get(post_id)
         
-        # Controleer of de post bestaat
+        # check if the post exists
         if not post:
             flash('Post not found!', 'danger')
             return redirect(url_for('explore'))
         
         try:
-            # Controleer of de huidige gebruiker de auteur van de post is
+            # Check whether the current user is the author.
             if post.author != current_user:
                 flash('You can only delete your own posts!', 'danger')
                 return redirect(url_for('explore'))
             
-            # Verwijder de post uit de database
+            # delete post
             db.session.delete(post)
             db.session.commit()
             flash('Post deleted successfully!', 'success')
         
         except Exception as e:
-            # Als er een probleem is, toon een foutmelding
+            # error message
             flash('There was a problem deleting that post: ' + str(e), 'danger')
         
         return redirect(url_for('explore'))
@@ -266,21 +266,18 @@ def init_routes(app):
     @app.route('/like/<int:post_id>', methods=['POST'])
     @login_required
     def like_recipe(post_id):
-        # Find the post by its ID
+        # find the post by its ID
         post = Post.query.get_or_404(post_id)
 
-        # Check if the user has already liked the post
+        # check if the user has already liked the post
         if not current_user.has_liked_post(post):
-            # Like the post
             current_user.like_post(post)
         else:
-            # Unlike the post
             current_user.unlike_post(post)
 
-        # Commit the changes to the database
         db.session.commit()
 
-        # Return the updated like count and liked status as JSON
+        # return the updated like count and liked status as JSON
         return jsonify({
             'likes_count': post.likes_count(),
             'liked': current_user.has_liked_post(post)
@@ -288,21 +285,20 @@ def init_routes(app):
     
     @app.route('/find_user', methods=['GET'])
     def find_user():
-        # Get the search query from the URL parameter, default to an empty string
         username_query = request.args.get('username', '').strip()
 
         if username_query:
-            # First, find users whose username starts with the query (sorted at the top)
+            # find users whose username starts with the query (sorted at the top)
             users_start = User.query.filter(User.username.ilike(f'{username_query}%')).all()
 
-            # Then, find users whose username contains the query (but doesn't start with it)
+            # find users whose username contains the query (but doesn't start with it)
             users_contains = User.query.filter(User.username.ilike(f'%{username_query}%')).all()
 
-            # Combine the two lists: first the users who start with the query, then the others
-            # Remove duplicates by using a set (to keep only unique users)
+            # combine the two lists: first the users who start with the query, then the others
+            # and remove duplicates
             users = list({user.id: user for user in users_start + users_contains}.values())
         else:
-            # If there's no search query, show all users
+            # if there's no search query, show all users
             users = User.query.all()
 
         return render_template('find_user.html', users=users, username_query=username_query)

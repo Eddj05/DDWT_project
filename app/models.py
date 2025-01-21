@@ -84,7 +84,6 @@ class User(PaginatedAPIMixin, UserMixin, db.Model):
     token: so.Mapped[Optional[str]] = so.mapped_column(sa.String(32), index=True, unique=True)
     token_expiration: so.Mapped[Optional[datetime]]
 
-    # Back-populate liked_posts relationship from Like model
     liked_posts = db.relationship('Like', back_populates='user', lazy='dynamic')
 
     def like_post(self, post):
@@ -227,7 +226,7 @@ class Like(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     post_id = db.Column(db.Integer, db.ForeignKey('post.id'), nullable=False)
 
-    # Ensure uniqueness of the like per user and post
+    # make sure that every like and user combination is unique
     db.UniqueConstraint('user_id', 'post_id', name='unique_user_post_like')
 
     user = db.relationship('User', back_populates='liked_posts')

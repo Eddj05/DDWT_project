@@ -9,8 +9,7 @@ from flask_migrate import Migrate
 # from app import routes, models, errors
 # from app.models import db
 
-
-# Initialize the database and login manager
+# initialize the database and login manager
 db = SQLAlchemy()
 login = LoginManager()
 migrate = Migrate()
@@ -19,7 +18,7 @@ def nl2br_filter(text):
     return text.replace('\n', '<br>\n')
 
 def create_app(config_class=Config):
-    # Create the App context
+    # create the app
     app = Flask(__name__)
 
     basedir = os.path.abspath(os.path.dirname(__file__))
