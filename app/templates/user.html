@@ -1,158 +1,69 @@
 {% extends "base.html" %}
 
-
 {% block content %}
-    <header class="site-header section-padding d-flex justify-content-center align-items-center">
-        <div class="container">
-            <div class="row">
-
-                <div class="col-lg-10 col-12">
-                    <h1>
-                        <td></td>
-                        <td>
-                        <span class="d-block text-primary">Username:</span>
-                        <span class="d-block text-dark"><img src="{{ user.avatar(128) }}"> {{ user.username }}</span>
-                    </h1>
-                    <h2>
-                        {% if user.about_me %}<p>{{ user.about_me }}</p>{% endif %}
-                        {% if user.last_seen %}<p>Last seen on: {{ user.last_seen }}</p>{% endif %}
-                        <p>{{ user.followers_count() }} followers, {{ user.following_count() }} following.</p>
-                        <p>{{user.liked_posts_count() }} liked posts.</p>
-                    </h2>
-                    <h2>
-                        {% if user == current_user %}
-                        {% if user.email %}<p>{{user.email}}</p>{% endif %}
+<header class="site-header section-padding d-flex justify-content-center align-items-center">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-10 col-12">
+                <h1>
+                    <span class="d-block text-primary">Username:</span>
+                    <span class="d-block text-dark"><img src="{{ user.avatar(128) }}"> {{ user.username }}</span>
+                </h1>
+                <h2>
+                    {% if user.about_me %}<p>{{ user.about_me }}</p>{% endif %}
+                    {% if user.last_seen %}<p>Last seen on: {{ user.last_seen }}</p>{% endif %}
+                    <p>{{ user.followers_count() }} followers, {{ user.following_count() }} following.</p>
+                    <p>{{ user.liked_posts_count() }} liked posts.</p>
+                </h2>
+                <h2>
+                    {% if user == current_user %}
+                        {% if user.email %}<p>{{ user.email }}</p>{% endif %}
                         <p><a href="{{ url_for('edit_profile') }}">Edit your profile</a></p>
-                        {% elif not current_user.is_following(user) %}
-                        <p>
-                            <form action="{{ url_for('follow', username=user.username) }}" method="post">
-                                {{ form.hidden_tag() }}
-                                {{ form.submit(value='Follow') }}
-                            </form>
-                        </p>
-                        {% else %}
-                        <p>
-                            <form action="{{ url_for('unfollow', username=user.username) }}" method="post">
-                                {{ form.hidden_tag() }}
-                                {{ form.submit(value='Unfollow') }}
-                            </form>
-                        </p>
-                        {% endif %}
-                        <p>
-                    </h2>
+                    {% elif not current_user.is_following(user) %}
+                        <form action="{{ url_for('follow', username=user.username) }}" method="post">
+                            {{ form.hidden_tag() }}
+                            {{ form.submit(value='Follow') }}
+                        </form>
+                    {% else %}
+                        <form action="{{ url_for('unfollow', username=user.username) }}" method="post">
+                            {{ form.hidden_tag() }}
+                            {{ form.submit(value='Unfollow') }}
+                        </form>
+                    {% endif %}
+                </h2>
+            </div>
+        </div>
+    </div>
+</header>
+
+<section class="products section-padding">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <h2 class="mb-5">Your Posts</h2>
+            </div>
+
+            <h3>
+                <a href="{{ url_for('add_recipe') }}" class="btn btn-success">Add a Recipe</a>
+            </h3>
+
+            {% for post in posts %}
+                <div class="col-lg-4 col-md-6 col-12 mb-3">
+                    {% include '_post.html' %}
+                </div>
+            {% endfor %}
+
+            <div class="col-12">
+                <div class="pagination-links">
+                    {% if prev_url %}
+                        <a href="{{ prev_url }}" class="btn btn-primary">Newer posts</a>
+                    {% endif %}
+                    {% if next_url %}
+                        <a href="{{ next_url }}" class="btn btn-primary">Older posts</a>
+                    {% endif %}
                 </div>
             </div>
         </div>
-    </header>
-    
-    <section class="products section-padding">
-        <div class="container">
-            <div class="row">
-                
-                <div class="col-12">
-                    <h2 class="mb-5">Your Posts</h2>
-                </div>
-
-                <div class="col-lg-4 col-12 mb-3">
-                    <div class="product-thumb">
-                        <a href="product-detail.html">
-                            <img src="..//static/images/product/evan-mcdougall-qnh1odlqOmk-unsplash.jpeg" class="img-fluid product-image" alt="">
-                        </a>
-
-                        <div class="product-top d-flex">
-                            <span class="product-alert me-auto">Recipe</span>
-
-                            <a href="#" class="bi-heart-fill product-icon"></a>
-                        </div>
-
-                        <div class="product-info d-flex">
-                            <div>
-                                <h5 class="product-title mb-0">
-                                    <a href="product-detail.html" class="product-title-link">
-                                        {% for post in posts %}
-                                        {% include '_post.html' %}
-                                        {% endfor %}
-                                        {% if prev_url %}
-                                        <a href="{{ prev_url }}">Newer posts</a>
-                                        {% endif %}
-                                        {% if next_url %}
-                                        <a href="{{ next_url }}">Older posts</a>
-                                        {% endif %}
-                                    </a>
-                                </h5>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-lg-4 col-12 mb-3">
-                    <div class="product-thumb">
-                        <a href="product-detail.html">
-                            <img src="../static/images/product/jordan-nix-CkCUvwMXAac-unsplash.jpeg" class="img-fluid product-image" alt="">
-                        </a>
-
-                        <div class="product-top d-flex">
-                            <span class="product-alert">Recipe</span>
-
-                            <a href="#" class="bi-heart-fill product-icon ms-auto"></a>
-                        </div>
-
-                        <div class="product-info d-flex">
-                            <div>
-                                <h5 class="product-title mb-0">
-                                    <a href="product-detail.html" class="product-title-link">
-                                        {% for post in posts %}
-                                        {% include '_post.html' %}
-                                        {% endfor %}
-                                        {% if prev_url %}
-                                        <a href="{{ prev_url }}">Newer posts</a>
-                                        {% endif %}
-                                        {% if next_url %}
-                                        <a href="{{ next_url }}">Older posts</a>
-                                        {% endif %}
-                                    </a>
-                                </h5>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-lg-4 col-12">
-                    <div class="product-thumb">
-                        <a href="product-detail.html">
-                            <img src="../static/images/product/nature-zen-3Dn1BZZv3m8-unsplash.jpeg" class="img-fluid product-image" alt="">
-                        </a>
-
-                        <div class="product-top d-flex">
-                            <span class="product-alert">Recipe</span>
-                            <a href="#" class="bi-heart-fill product-icon ms-auto"></a>
-                        </div>
-
-                        <div class="product-info d-flex">
-                            <div>
-                                <h5 class="product-title mb-0">
-                                    <a href="product-detail.html" class="product-title-link">                                     
-                                        {% for post in posts %}
-                                        {% include '_post.html' %}
-                                        {% endfor %}
-                                        {% if prev_url %}
-                                        <a href="{{ prev_url }}">Newer posts</a>
-                                        {% endif %}
-                                        {% if next_url %}
-                                        <a href="{{ next_url }}">Older posts</a>
-                                        {% endif %}
-                                    </a>
-                                </h5>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <h3>
-                    <a href="{{ url_for('add_recipe') }}" class="btn btn-success">Add a Recipe</a>
-                </h3>
-            </div>
-        </div>
-    </section>
-
+    </div>
+</section>
 {% endblock %}
