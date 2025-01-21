@@ -289,6 +289,7 @@ def init_routes(app):
         })
     
     @app.route('/find_user', methods=['GET'])
+    @login_required
     def find_user():
         username_query = request.args.get('username', '').strip()
 
