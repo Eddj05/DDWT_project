@@ -4,12 +4,8 @@ from flask_sqlalchemy import SQLAlchemy
 import os
 from flask_login import LoginManager
 from flask_migrate import Migrate
-# from app.api import bp as api_bp
-# from app import routes
-# from app import routes, models, errors
-# from app.models import db
 
-# initialize the database and login manager
+
 db = SQLAlchemy()
 login = LoginManager()
 migrate = Migrate()
