@@ -1,9 +1,9 @@
 from flask import Flask
 from app import create_app
 
-# Maak een app-instantie met behulp van de create_app-functie
+# Make an app-instance with the create_app-function
 app = create_app()
 
 if __name__ == "__main__":
-    # Start de Flask-app in debug-modus
+    # Start the Flask-app in debug-mode
     app.run(debug=True)
