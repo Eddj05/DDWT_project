@@ -103,6 +103,20 @@ class User(PaginatedAPIMixin, UserMixin, db.Model):
     def __repr__(self):
         return f"<User {self.username}>"
 
+    def get_token(self, expires_in=3600):
+        now = datetime.now(timezone.utc)
+        if self.token and self.token_expiration.replace(
+                tzinfo=timezone.utc) > now + timedelta(seconds=60):
+            return self.token
+        self.token = secrets.token_hex(16)
+        self.token_expiration = now + timedelta(seconds=expires_in)
+        db.session.add(self)
+        return self.token
+
+    def revoke_token(self):
+        self.token_expiration = datetime.now(timezone.utc) - timedelta(
+            seconds=1)
+        
     @staticmethod
     def check_token(token):
         user = db.session.scalar(sa.select(User).where(User.token == token))
