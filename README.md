@@ -27,6 +27,20 @@ To run this project on your local machine, you will need the following:
 - CSS
 - JavaScript
 
+## Resources
+- Grinberg, Miguel. 2023. “The Flask Mega-Tutorial, Part I: Hello, World!”
+Miguelgrinberg.Com. 3 December 2023. Geraadpleegd 15 december 2024.
+https://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-i-hello-world.
+- Kurt, Hasan. 2022. White Ceramic Mug With Coffee Beside Brown Dried Leaf. Pexels.
+https://www.pexels.com/photo/white-ceramic-mug-with-coffee-beside-brown-dried-leaf-1
+0749578/.
+- Free CSS | 3552 Free Website Templates, CSS Templates and Open Source
+Templates,” n.d. https://www.free-css.com/.
+- Tooplate. “Download 60+ Free HTML Website Templates - Responsive & Mobile Ready.”
+Tooplate, n.d. https://www.tooplate.com/.
+- OpenAI. 2025. “ChatGPT”. ChatGPT. 2025. Geraadpleegd 21 januari 2025.
+https://chatgpt.com/.
+
 # How to run the project:
 
 ## 1. Clone the repository:
